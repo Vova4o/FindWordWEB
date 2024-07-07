@@ -21,11 +21,25 @@ func (app *application) ShowPage(c *gin.Context) {
 }
 
 type Filter struct {
-	CurPage      int    `json:"currentPage"`
-	Letters      string `json:"filter"`
-	WordsPerPage int    `json:"wordsPerPage"`
-}
+	CurPage      int    `json:"currentPage" example:"1"`
+	Letters      string `json:"filter" example:"привет"`
+	WordsPerPage int    `json:"wordsPerPage" example:"20"`
+} // @name Filter
 
+type ErrorResponse struct {
+	Error string `json:"error" example:"need a list of letters"`
+} // @name ErrorResponse
+
+// FilterdList is a handler that filters the list of words based on the filter
+// @Summary Returns a list of words based on the filter
+// @Description Filter the list of words based on the letters and numbers provided in the input
+// @Tags filter
+// @Accept json
+// @Produce json
+// @Param filter body Filter false "Filter"
+// @Success 200 {object} Filter
+// @Failure 400 {object} ErrorResponse
+// @Router /filter [post]
 func (app *application) FilterdList(c *gin.Context) {
 	var Filter Filter
 	// get from json request filter

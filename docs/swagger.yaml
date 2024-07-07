@@ -1,0 +1,56 @@
+basePath: /api
+definitions:
+  ErrorResponse:
+    properties:
+      error:
+        example: need a list of letters
+        type: string
+    type: object
+  Filter:
+    properties:
+      currentPage:
+        example: 1
+        type: integer
+      filter:
+        example: привет
+        type: string
+      wordsPerPage:
+        example: 20
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: |-
+    This is a simple API for finding words in a list of words.
+    It has a single endpoint that filters the list of words based on the letters and numbers provided in the input in cyrillic letters.
+  title: Find a Word API
+  version: "1.0"
+paths:
+  /filter:
+    post:
+      consumes:
+      - application/json
+      description: Filter the list of words based on the letters and numbers provided
+        in the input
+      parameters:
+      - description: Filter
+        in: body
+        name: filter
+        schema:
+          $ref: '#/definitions/Filter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Filter'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      summary: Returns a list of words based on the filter
+      tags:
+      - filter
+swagger: "2.0"

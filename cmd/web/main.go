@@ -11,6 +11,14 @@ import (
 	"github.com/Vova4o/findaWordweb/config"
 )
 
+// @title Find a Word API
+// @version 1.0
+// @description This is a simple API for finding words in a list of words.
+// @description It has a single endpoint that filters the list of words based on the letters and numbers provided in the input in cyrillic letters.
+
+// @host localhost:8080
+// @BasePath /api
+
 type application struct {
 	cfg         config.Config
 	templateMap map[string]*template.Template
