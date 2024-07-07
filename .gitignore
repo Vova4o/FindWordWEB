@@ -4,3 +4,4 @@ static/.DS_Store
 findwords
 static/*
 templates/test.page.gohtml
+notes.txt
