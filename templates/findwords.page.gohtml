@@ -1,0 +1,96 @@
+{{template "base" .}}
+{{define "content"}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Найди слово по буквам</h1>
+            <p>Думаю все играли в игру Скрэббл, где по имеющимся буквам нужно составить слово.</p>
+            <p>Так вот, в этом приложении вы можете ввести буквы, которые у вас есть, и найти все слова, которые можно составить из этих букв.</p>
+            <hr>
+            <p>Например вы можете ввести буквы абвг6, тогда после ввода цифры 6, вы увидите все слова, которые можно составить из букв абвг максимальной длинной 6 символов.</p>
+            <div>
+            <h3>Введите буквы для начала поиска</h3>
+                <input type="text" id="letters-input" class="form-control mb-2" placeholder="Enter letters">
+            </div>
+            <div class="mt-2" style="outline: 1px solid silver; padding: 2em;">
+                <pre id="words-result"><span class="text-muted">Nothing Received yet...</span></pre>
+            </div>
+            <hr>
+            <div>
+                <!-- Forward and back buttons -->
+                <a href="javascript:void(0);" id="back-btn" class="btn btn-outline-primary">Back</a>
+                <a href="javascript:void(0);" id="forward-btn" class="btn btn-outline-primary">Forward</a>            
+            </div>
+        </div>
+    </div>
+</div>
+
+{{end}}
+
+
+{{define "js"}}
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    // TODO передать в контекст листенера по клику 
+
+    const backBtn = document.getElementById('back-btn');
+    const forwardBtn = document.getElementById('forward-btn');
+    const wordsResult = document.getElementById('words-result');
+    const lettersInput = document.getElementById('letters-input');
+
+    let currentPage = 1;
+    let filter = "";
+    const wordsPerPage = 20;
+    let totalWords = 0;
+
+    async function displayWords () {
+        try {
+            const response = await fetch('/api/filter', { method: 'POST', body: JSON.stringify({ filter, currentPage, wordsPerPage }), headers: { 'Content-Type': 'application/json' } });
+            const data = await response.json();
+            console.log('All words:', data.words.length); 
+            // Generate HTML for the paginated words
+            const wordsListHtml = data.words.map(word => `<li>${word}</li>`).join('');
+            wordsResult.innerHTML = `<ul>${wordsListHtml}</ul>`;
+
+            totalWords = data.total;
+            // Update pagination controls visibility or state if necessary
+            // For example, disable the forward button if at the end of the list
+            console.log('Current page:', currentPage);
+            console.log('Length:', data.total);
+            forwardBtn.disabled = wordsPerPage * currentPage >= data.total;
+            backBtn.disabled = currentPage === 1;
+        } catch (error) {
+            console.error('Fetch error:', error);
+            wordsResult.innerHTML = 'An error occurred. Please try again later.';
+        }
+    };
+
+    backBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayWords();
+            }
+    });
+
+    forwardBtn.addEventListener('click', () => {
+        if (wordsPerPage * currentPage < totalWords) {
+        currentPage++;
+        displayWords();
+        }
+    });
+
+lettersInput.addEventListener('input', async (event) => {
+    filter = event.target.value;
+    currentPage = 1;   
+    displayWords(); 
+    });
+
+    displayWords();
+
+});
+</script>
+
+{{end}}

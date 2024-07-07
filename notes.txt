@@ -1,0 +1,16 @@
+THIS IS WHAT NEEDS TO BE ENTERED TO MAKE IT UPLOADED TO digitalocean!
+
+docker tag findwords:0.1.0 registry.digitalocean.com/my-test-app-storage/findwords:0.1.0 
+
+docker push registry.digitalocean.com/my-test-app-storage/findwords:0.1.0
+
+findwordweb-findwords-service:latest
+
+docker tag findwordweb-findwords-service:latest registry.digitalocean.com/my-test-app-storage/findwords:0.2.0 
+
+docker push registry.digitalocean.com/my-test-app-storage/findwords:0.2.0
+
+envs: 
+  - key: USE_CACHE
+    value: "true"
+

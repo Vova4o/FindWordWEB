@@ -1,0 +1,6 @@
+static/home-page/scrabble.jpg
+static/home-page/scrabble.webp
+static/.DS_Store
+findwords
+static/*
+templates/test.page.gohtml
